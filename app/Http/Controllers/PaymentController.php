@@ -2,55 +2,33 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Payment;
 use Illuminate\Http\Request;
-use Stripe\Checkout\Session;
+use App\Services\PaymentService;
 
 class PaymentController extends Controller
 {
+    protected $paymentService;
+
+    public function __construct(PaymentService $paymentService)
+    {
+        $this->paymentService = $paymentService;
+    }
+
     public function checkout(Request $request)
     {
-        \Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
-
-        $lineItems = [[
-            'price_data' => [
-                'currency' => 'usd',
-                'unit_amount' => $request->total_price * 100, // Convert to cents
-                'product_data' => [
-                    'name' => 'Booking',
-                ],
-            ],
-            'quantity' => 1,
-        ]];
-
-        $session = Session::create([
-            'payment_method_types' => ['card'],
-            'customer_email' => $request->email,
-            'line_items' => $lineItems,
-            'mode' => 'payment',
-            'success_url' => route('success', [], true) . "?session_id={CHECKOUT_SESSION_ID}",
-            'cancel_url' => route('cancel', [], true),
-        ]);
+        $url = $this->paymentService->createCheckoutSession($request->email, $request->total_price);
 
         return response()->json([
-            'url' => $session->url
+            'url' => $url
         ]);
     }
 
     public function success(Request $request)
     {
-        $stripe = new \Stripe\StripeClient(env('STRIPE_SECRET'));
         $sessionId = $request->get('session_id');
-        $session = $stripe->checkout->sessions->retrieve($sessionId);
+        $session = $this->paymentService->retrieveSession($sessionId);
 
-        $payment = new Payment();
-        $payment->customer_email = $session->customer_email;
-        $payment->amount_total = $session->amount_total / 100;;
-        $payment->payment_intent_id = $session->payment_intent;
-        $payment->payment_method = $session->payment_method_types[0];
-        $payment->payment_status = $session->payment_status;
-        $payment->date = now();
-        $payment->save();
+        $this->paymentService->createPaymentRecord($session);
 
         return redirect()->away(env('FRONTEND_URL') . '/success');
     }
