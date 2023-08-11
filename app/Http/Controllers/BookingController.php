@@ -9,6 +9,7 @@ use App\Http\Resources\BookingResourceCollection;
 use App\Models\Booking;
 use App\Repositories\Contracts\BookingRepository;
 use Illuminate\Http\Request;
+use App\Events\BookingCreatedOrUpdated;
 
 class BookingController extends Controller
 {
@@ -28,6 +29,7 @@ class BookingController extends Controller
     public function store(StoreBookingRequest $request)
     {
         $booking = $this->bookingRepository->save($request->validated());
+        event(new BookingCreatedOrUpdated($booking));
         return new BookingResource($booking);
     }
 
