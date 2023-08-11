@@ -23,6 +23,8 @@ return new class extends Migration
             $table->date('pick_up_date');
             $table->time('pick_up_time');
             $table->decimal('total_price', 8, 2);
+            $table->text('notes')->nullable();
+            $table->boolean('released')->nullable()->default(false);
             $table->timestamps();
         });
     }

@@ -19,6 +19,9 @@ class StoreBookingRequest extends Request
             'pick_up_date' => 'required|date',
             'pick_up_time' => 'required|string',
             'total_price' => 'required|numeric',
+            'notes' => 'nullable|string',
+            'released' => 'nullable|boolean',
+
         ];
     }
 }

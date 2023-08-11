@@ -20,6 +20,8 @@ class BookingResource extends Resource
             'pick_up_date' => $this->pick_up_date,
             'pick_up_time' => $this->pick_up_time,
             'total_price' => $this->total_price,
+            'notes' => $this->notes,
+            'released' => $this->released,
             'created_at' => $this->created_at,
         ];
     }
