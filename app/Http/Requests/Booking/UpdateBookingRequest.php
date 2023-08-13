@@ -19,6 +19,8 @@ class UpdateBookingRequest extends Request
             'pick_up_date' => 'date',
             'pick_up_time' => 'string',
             'total_price' => 'numeric',
+            'notes' => 'nullable|string',
+            'released' => 'nullable|boolean'
         ];
     }
 }

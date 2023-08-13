@@ -19,5 +19,7 @@ class Booking extends Model
         'pick_up_date',
         'pick_up_time',
         'total_price',
+        'notes',
+        'released',
     ];
 }
