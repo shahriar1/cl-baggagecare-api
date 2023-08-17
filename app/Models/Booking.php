@@ -21,5 +21,6 @@ class Booking extends Model
         'total_price',
         'notes',
         'released',
+        'qr_code,'
     ];
 }

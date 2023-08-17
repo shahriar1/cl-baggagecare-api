@@ -25,6 +25,7 @@ return new class extends Migration
             $table->decimal('total_price', 8, 2);
             $table->text('notes')->nullable();
             $table->boolean('released')->nullable()->default(false);
+            $table->text('qr_code')->nullable(); 
             $table->timestamps();
         });
     }

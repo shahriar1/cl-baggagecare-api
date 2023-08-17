@@ -10,6 +10,9 @@ use App\Models\Booking;
 use App\Repositories\Contracts\BookingRepository;
 use Illuminate\Http\Request;
 use App\Events\BookingCreatedOrUpdated;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
+
+
 
 class BookingController extends Controller
 {
@@ -25,10 +28,27 @@ class BookingController extends Controller
         $bookings = $this->bookingRepository->findBy();
         return new BookingResourceCollection($bookings);
     }
+    public function qr()
+    {
+        return view('qrcode');
+    }
 
     public function store(StoreBookingRequest $request)
     {
         $booking = $this->bookingRepository->save($request->validated());
+
+        $url = env('FRONTEND_URL');
+        $bookingId = $booking->id;
+        $qrCodeData = "{$url}/booking-confirmation/{$bookingId}";
+
+
+        $qrCodeImage = QrCode::format('png')->size(200)->generate($qrCodeData);
+
+        // Convert the QR code image to base64
+        $qrCodeBase64 = base64_encode($qrCodeImage);
+
+        // Store the base64-encoded QR code in the 'qr_code' column
+        Booking::query()->where('id', $booking->id)->update(['qr_code' => $qrCodeBase64]);
         event(new BookingCreatedOrUpdated($booking));
         return new BookingResource($booking);
     }
