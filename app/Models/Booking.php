@@ -22,7 +22,8 @@ class Booking extends Model
         'total_price',
         'notes',
         'released',
-        'qr_code,'
+        'qr_code,',
+        'payment_qr_code'
     ];
     public function payment(): HasOne
     {

@@ -24,6 +24,7 @@ class BookingResource extends Resource
             'total_price' => $this->total_price,
             'notes' => $this->notes,
             'qr_code' => $this->qr_code,
+            'payment_qr_code' => $this->payment_qr_code,
             'released' => $this->released,
             'created_at' => $this->created_at,
 

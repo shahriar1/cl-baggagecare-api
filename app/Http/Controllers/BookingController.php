@@ -12,15 +12,18 @@ use Illuminate\Http\Request;
 use App\Events\BookingCreatedOrUpdated;
 use App\Events\GenerateQrCode;
 use App\Models\Payment;
+use App\Services\PaymentService;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class BookingController extends Controller
 {
 
-    
+    protected $paymentService;
     protected $bookingRepository;
 
-    public function __construct(BookingRepository $bookingRepository)
+    public function __construct(PaymentService $paymentService, BookingRepository $bookingRepository)
     {
+        $this->paymentService = $paymentService;
         $this->bookingRepository = $bookingRepository;
     }
 
@@ -36,6 +39,15 @@ class BookingController extends Controller
         $bookingData = $request->validated();
 
         $booking = $this->bookingRepository->save($bookingData);
+
+        $url = $this->paymentService->createCheckoutSession($booking->email, $booking->total_price, $booking->id);
+        $qrCode = QrCode::format('png')->size(200)->generate($url);
+
+
+        $qrCodeBase64 = base64_encode($qrCode);
+        $booking = Booking::find($booking->id);
+        $booking->payment_qr_code = $qrCodeBase64;
+        $booking->save();
 
 
         // Create a Payment record associated with the booking

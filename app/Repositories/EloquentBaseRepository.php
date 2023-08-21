@@ -53,7 +53,7 @@ class EloquentBaseRepository implements BaseRepository
             $queryBuilder->withTrashed();
         }
 
-        if($withLatest) {
+        if ($withLatest) {
             $queryBuilder->latest($latestBy);
         }
 
@@ -70,10 +70,19 @@ class EloquentBaseRepository implements BaseRepository
         return $this->model->create($data);
     }
 
-    // public function create(array $data): \ArrayAccess
-    // {
-    //     return $this->model->create($data);
-    // }
+
+    protected function updatePaymentData(\ArrayAccess $model, array $data)
+    {
+        if ($model->payment) {
+            $paymentData = [
+                'customer_email' => $data['email'],
+                'amount_total' => $data['total_price'],
+                'payment_status' => $data['payment_status'],
+                // Update other payment fields if needed
+            ];
+            $model->payment->update($paymentData);
+        }
+    }
 
     /**
      * @inheritdoc
@@ -91,6 +100,8 @@ class EloquentBaseRepository implements BaseRepository
 
         // update the model
         $model->save();
+        // Update the payment data
+        $this->updatePaymentData($model, $data);
 
         return $model;
     }
@@ -102,5 +113,4 @@ class EloquentBaseRepository implements BaseRepository
     {
         return $model->delete();
     }
-
 }

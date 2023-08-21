@@ -16,7 +16,8 @@ class PaymentController extends Controller
 
     public function checkout(Request $request)
     {
-        $url = $this->paymentService->createCheckoutSession($request->email, $request->total_price);
+
+        $url = $this->paymentService->createCheckoutSession($request->email, $request->total_price, $request->id);
 
         return response()->json([
             'url' => $url
@@ -28,9 +29,11 @@ class PaymentController extends Controller
         $sessionId = $request->get('session_id');
         $session = $this->paymentService->retrieveSession($sessionId);
 
-        $this->paymentService->createPaymentRecord($session);
+        $bookingId = $session->metadata->id;
 
-        return redirect()->away(env('FRONTEND_URL') . '/success');
+        $this->paymentService->createOrUpdatePaymentRecord($session, $bookingId);
+
+        return redirect()->away(env('FRONTEND_URL') . "/booking-confirmation/{$bookingId}");
     }
 
     public function cancel()
