@@ -21,6 +21,9 @@ class StoreBookingRequest extends Request
             'total_price' => 'required|numeric',
             'notes' => 'nullable|string',
             'released' => 'nullable|boolean',
+            'payment_status' => 'required|string', 
+            'payment_method'=> 'required|string',
+
 
         ];
     }

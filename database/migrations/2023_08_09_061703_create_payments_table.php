@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('booking_id');
             $table->string('customer_email')->nullable();
             $table->string('amount_total')->nullable();
             $table->string('payment_intent_id')->nullable();
@@ -20,6 +21,8 @@ return new class extends Migration
             $table->string('payment_status')->nullable();
             $table->timestamp('date')->nullable();
             $table->timestamps();
+            
+            $table->foreign('booking_id')->references('id')->on('bookings')->onDelete('cascade');
         });
     }
 

@@ -8,6 +8,8 @@ class BookingResource extends Resource
 {
     public function toArray(Request $request)
     {
+
+        $this->load('payment');
         return [
             'id' => $this->id,
             'drop_off_date' => $this->drop_off_date,
@@ -24,6 +26,17 @@ class BookingResource extends Resource
             'qr_code' => $this->qr_code,
             'released' => $this->released,
             'created_at' => $this->created_at,
+
+            'payment' => $this->payment ? [
+                'id' => $this->payment->id,
+                'customer_email' => $this->payment->customer_email,
+                'amount_total' => $this->payment->amount_total,
+                'payment_intent_id' => $this->payment->payment_intent_id,
+                'payment_method' => $this->payment->payment_method,
+                'payment_status' => $this->payment->payment_status,
+                'date' => $this->payment->date,
+            ] : null,
+            // 'payment' => new PaymentResource($this->whenLoaded('payment')), // Assuming you have a PaymentResource
         ];
     }
 }

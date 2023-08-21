@@ -27,6 +27,7 @@ return new class extends Migration
             $table->boolean('released')->nullable()->default(false);
             $table->text('qr_code')->nullable(); 
             $table->timestamps();
+
         });
     }
 
