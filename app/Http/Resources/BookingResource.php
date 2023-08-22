@@ -21,6 +21,7 @@ class BookingResource extends Resource
             'pick_up_time' => $this->pick_up_time,
             'total_price' => $this->total_price,
             'notes' => $this->notes,
+            'qr_code' => $this->qr_code,
             'released' => $this->released,
             'created_at' => $this->created_at,
         ];

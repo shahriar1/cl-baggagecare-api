@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use App\Events\BookingCreatedOrUpdated;
+use App\Events\GenerateQrCode;
+use App\Listeners\GenerateQrCodeListener;
 use App\Listeners\SendBookingCreatedOrUpdatedNotification;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -22,6 +24,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         BookingCreatedOrUpdated::class => [
             SendBookingCreatedOrUpdatedNotification::class,
+        ],
+        GenerateQrCode::class => [
+            GenerateQrCodeListener::class,
         ],
     ];
 

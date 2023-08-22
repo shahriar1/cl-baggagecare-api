@@ -10,6 +10,8 @@ use App\Models\Booking;
 use App\Repositories\Contracts\BookingRepository;
 use Illuminate\Http\Request;
 use App\Events\BookingCreatedOrUpdated;
+use App\Events\GenerateQrCode;
+
 
 class BookingController extends Controller
 {
@@ -26,9 +28,13 @@ class BookingController extends Controller
         return new BookingResourceCollection($bookings);
     }
 
+
     public function store(StoreBookingRequest $request)
     {
         $booking = $this->bookingRepository->save($request->validated());
+
+        event(new GenerateQrCode($booking));
+
         event(new BookingCreatedOrUpdated($booking));
         return new BookingResource($booking);
     }
