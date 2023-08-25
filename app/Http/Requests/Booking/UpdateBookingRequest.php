@@ -22,7 +22,9 @@ class UpdateBookingRequest extends Request
             'notes' => 'nullable|string',
             'released' => 'nullable|boolean',
             'payment_status' => 'required|string', 
-            'payment_method'=> 'required|string',
+            'payment_method'=> 'nullable|string',
+            'booking_status'=> 'nullable|string',
+
         ];
     }
 }
