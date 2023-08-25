@@ -19,6 +19,16 @@ class EloquentBaseRepository implements BaseRepository
         $this->model = $model;
     }
 
+    /**
+     * get the model
+     *
+     * @return Model
+     */
+    public function getModel()
+    {
+        return $this->model;
+    }
+
 
     /**
      * @inheritdoc
@@ -39,7 +49,11 @@ class EloquentBaseRepository implements BaseRepository
      */
     public function findBy(array $searchCriteria = [], $withTrashed = false)
     {
-        return $this->model->orderBy('id', 'DESC')->get();
+        if (isset($searchCriteria['booking_status'])) {
+            $searchCriteria['booking_status'] = strtolower($searchCriteria['booking_status']);
+        }
+
+        return $this->model->where($searchCriteria)->orderBy('id', 'DESC')->paginate(10);
     }
 
     /**

@@ -23,7 +23,8 @@ class Booking extends Model
         'notes',
         'released',
         'qr_code,',
-        'payment_qr_code'
+        'payment_qr_code',
+        'booking_status',
     ];
     public function payment(): HasOne
     {
