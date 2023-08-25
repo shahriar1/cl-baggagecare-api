@@ -4,6 +4,7 @@ namespace App\Listeners;
 
 use App\Events\GenerateQrCode;
 use App\Models\Booking;
+use App\Repositories\Contracts\BookingRepository;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
@@ -27,6 +28,7 @@ class GenerateQrCodeListener implements ShouldQueue
         $qrCodeBase64 = base64_encode($qrCodeImage);
 
         // Update the booking model with the QR code
-        Booking::query()->where('id', $booking->id)->update(['qr_code' => $qrCodeBase64]);
+        $bookingRepo = app(BookingRepository::class);
+        $bookingRepo->getModel()->update($booking, ['qr_code' => $qrCodeBase64]);
     }
 }
