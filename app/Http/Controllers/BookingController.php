@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Booking\IndexBookingRequest;
 use App\Http\Requests\Booking\StoreBookingRequest;
 use App\Http\Requests\Booking\UpdateBookingRequest;
 use App\Http\Resources\BookingResource;
@@ -27,15 +28,9 @@ class BookingController extends Controller
         $this->bookingRepository = $bookingRepository;
     }
 
-    public function index()
+    public function index(IndexBookingRequest $request)
     {
-        $filter_status = request()->query('filter');
-
-        if ($filter_status) {
-            $bookings = $this->bookingRepository->findBy(['booking_status' => $filter_status]);
-        } else {
-            $bookings = $this->bookingRepository->findBy();
-        }
+        $bookings = $this->bookingRepository->findBy($request->all());
         return new BookingResourceCollection($bookings);
     }
 
@@ -46,12 +41,12 @@ class BookingController extends Controller
 
         $booking = $this->bookingRepository->save($bookingData);
 
-        $url = $this->paymentService->createCheckoutSession($booking->email, $booking->total_price, $booking->id);
-        $qrCode = QrCode::format('png')->size(200)->generate($url);
-        $qrCodeBase64 = base64_encode($qrCode);
-        $booking = Booking::find($booking->id);
-        $booking->payment_qr_code = $qrCodeBase64;
-        $booking->save();
+//        $url = $this->paymentService->createCheckoutSession($booking->email, $booking->total_price, $booking->id);
+//        $qrCode = QrCode::format('png')->size(200)->generate($url);
+//        $qrCodeBase64 = base64_encode($qrCode);
+//        $booking = Booking::find($booking->id);
+//        $booking->payment_qr_code = $qrCodeBase64;
+//        $booking->save();
 
         // Create a Payment record associated with the booking
         $paymentData = [
@@ -64,8 +59,8 @@ class BookingController extends Controller
         ];
         $payment = Payment::create($paymentData);
 
-        event(new GenerateQrCode($booking));
-        event(new BookingCreatedOrUpdated($booking));
+//        event(new GenerateQrCode($booking));
+//        event(new BookingCreatedOrUpdated($booking));
 
         $booking = Booking::with('payment')->find($booking->id);
         return new BookingResource($booking);

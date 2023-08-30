@@ -3,6 +3,8 @@
 namespace App\Http\Requests\Booking;
 
 use App\Http\Requests\Request;
+use App\Models\Booking;
+use Illuminate\Validation\Rule;
 
 class StoreBookingRequest extends Request
 {
@@ -21,11 +23,9 @@ class StoreBookingRequest extends Request
             'total_price' => 'required|numeric',
             'notes' => 'nullable|string',
             'released' => 'nullable|boolean',
-            'payment_status' => 'required|string', 
+            'payment_status' => 'required|string',
             'payment_method'=> 'nullable|string',
-            'booking_status'=> 'nullable|string',
-
-
+            'booking_status'=> ['nullable', 'string', Rule::in(Booking::ALL_STATUS)],
         ];
     }
 }
