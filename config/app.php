@@ -59,6 +59,8 @@ return [
 
     'asset_url' => env('ASSET_URL'),
 
+    'logo_url' => sprintf(env('APP_URL'). '/logo/luggage.png'),
+
     /*
     |--------------------------------------------------------------------------
     | Application Timezone
