@@ -29,16 +29,16 @@ class BookingResource extends Resource
             'booking_status' => $this->booking_status,
             'created_at' => $this->created_at,
 
-            'payment' => $this->payment ? [
-                'id' => $this->payment->id,
-                'customer_email' => $this->payment->customer_email,
-                'amount_total' => $this->payment->amount_total,
-                'payment_intent_id' => $this->payment->payment_intent_id,
-                'payment_method' => $this->payment->payment_method,
-                'payment_status' => $this->payment->payment_status,
-                'date' => $this->payment->date,
-            ] : null,
-            // 'payment' => new PaymentResource($this->whenLoaded('payment')), // Assuming you have a PaymentResource
+            // 'payment' => $this->payment ? [
+            //     'id' => $this->payment->id,
+            //     'customer_email' => $this->payment->customer_email,
+            //     'amount_total' => $this->payment->amount_total,
+            //     'payment_intent_id' => $this->payment->payment_intent_id,
+            //     'payment_method' => $this->payment->payment_method,
+            //     'payment_status' => $this->payment->payment_status,
+            //     'date' => $this->payment->date,
+            // ] : null,
+            'payment' => new PaymentResource($this->whenLoaded('payment')), // Assuming you have a PaymentResource
         ];
     }
 }

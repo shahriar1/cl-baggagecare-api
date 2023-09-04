@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 class EloquentBaseRepository implements BaseRepository
 {
-    private Model $model;
+    protected Model $model;
 
     /**
      * EloquentBaseRepository constructor.
@@ -254,7 +254,7 @@ class EloquentBaseRepository implements BaseRepository
         // update the model
         $model->save();
         // Update the payment data
-        $this->updatePaymentData($model, $data);
+        // $this->updatePaymentData($model, $data);
 
         return $model;
     }

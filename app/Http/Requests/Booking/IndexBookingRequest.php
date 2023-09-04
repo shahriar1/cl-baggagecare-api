@@ -18,7 +18,10 @@ class IndexBookingRequest extends Request
     public function rules(): array
     {
         return [
-            'booking_status'=> ['', Rule::in(Booking::ALL_STATUS)],
+            'booking_status' => ['', Rule::in(Booking::ALL_STATUS)],
+            'email' => 'nullable|email', // Allowing filtering by email
+            'first_name' => 'nullable|string', // Allowing filtering by name
+            'query' => 'string'
         ];
     }
 }
