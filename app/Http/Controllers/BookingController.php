@@ -14,6 +14,7 @@ use App\Events\GenerateQrCode;
 use App\Models\Payment;
 use App\Services\PaymentService;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Illuminate\Support\Str;
 
 class BookingController extends Controller
 {
@@ -43,6 +44,11 @@ class BookingController extends Controller
     public function store(StoreBookingRequest $request)
     {
         $bookingData = $request->validated();
+
+        $randomNumber = Str::random(5);
+        $date = now()->format('Ymd');
+        $trackingNumber = $date . $randomNumber;
+        $bookingData['tracking_number'] = $trackingNumber;
 
         $booking = $this->bookingRepository->save($bookingData);
 

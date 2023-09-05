@@ -25,6 +25,7 @@ class Booking extends Model
         'qr_code,',
         'payment_qr_code',
         'booking_status',
+        'tracking_number',
     ];
     public function payment(): HasOne
     {
