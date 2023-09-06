@@ -8,7 +8,7 @@ class EloquentBookingRepository extends EloquentBaseRepository implements \App\R
     {
         if(isset($searchCriteria['query'])) {
           $searchCriteria['id'] = $this->model->where('email', 'like', '%' . $searchCriteria['query'] . '%')
-               ->orWhere('first_name', 'like', '%' . $searchCriteria['query'] . '%')->pluck('id')->toArray();
+               ->orWhere('phone_number', 'like', '%' . $searchCriteria['query'] . '%')->pluck('id')->toArray();
 
             unset($searchCriteria['query']);
         }
