@@ -4,8 +4,6 @@ namespace App\Http\Requests\Booking;
 
 use App\Models\Booking;
 use Illuminate\Validation\Rule;
-
-use Illuminate\Foundation\Http\FormRequest;
 use App\Http\Requests\Request;
 
 class IndexBookingRequest extends Request

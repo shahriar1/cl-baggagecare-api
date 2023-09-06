@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Payment;
+
+use App\Http\Requests\Request;
 
 class StorePaymentRequest extends Request
 {
@@ -9,11 +11,11 @@ class StorePaymentRequest extends Request
     {
         return [
             'booking_id' => 'required|exists:bookings,id',
-            'customer_email' => 'nullable|email',
-            'amount_total' => 'nullable|numeric',
+            'customer_email' => 'required|email',
+            'amount_total' => 'required|numeric',
             'payment_intent_id' => 'nullable|string',
-            'payment_method' => 'nullable|string',
-            'payment_status' => 'nullable|string',
+            'payment_method' => 'required|string',
+            'payment_status' => 'required|string',
             'date' => 'nullable|date',
         ];
     }

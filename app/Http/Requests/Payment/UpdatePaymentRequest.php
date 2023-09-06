@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Payment;
 
+use App\Http\Requests\Request;
 
 class UpdatePaymentRequest extends Request
 {

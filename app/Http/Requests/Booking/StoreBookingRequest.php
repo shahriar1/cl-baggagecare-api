@@ -12,19 +12,19 @@ class StoreBookingRequest extends Request
     {
         return [
             'drop_off_date' => 'required|date',
-            'drop_off_time' => 'required|string',
+            'drop_off_time' => 'nullable|string',
             'email' => 'required|email',
             'first_name' => 'required|string',
             'last_name' => 'nullable|string',
             'luggage_quantity' => 'required|integer',
-            'phone_number' => 'nullable|string',
+            'phone_number' => 'required|string',
             'pick_up_date' => 'nullable|date',
-            'pick_up_time' => 'required|string',
+            'pick_up_time' => 'nullable|string',
             'total_price' => 'required|numeric',
             'notes' => 'nullable|string',
             'released' => 'nullable|boolean',
             'payment_status' => 'required|string',
-            'payment_method'=> 'nullable|string',
+            'payment_method'=> 'required|string',
             'booking_status'=> ['nullable', 'string', Rule::in(Booking::ALL_STATUS)],
         ];
     }
