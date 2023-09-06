@@ -8,6 +8,7 @@ use App\Http\Requests\Payment\UpdatePaymentRequest;
 use App\Http\Resources\PaymentResource;
 use App\Http\Resources\PaymentResourceCollection;
 use App\Models\Payment;
+use App\Repositories\Contracts\BookingRepository;
 use App\Repositories\Contracts\PaymentRepository;
 use App\Services\PaymentService;
 
@@ -16,11 +17,14 @@ class PaymentController extends Controller
 {
     protected $paymentRepository;
     protected $paymentService;
+    protected $bookingRepository;
 
-    public function __construct(PaymentRepository $paymentRepository, PaymentService $paymentService)
+
+    public function __construct(PaymentRepository $paymentRepository, BookingRepository $bookingRepository, PaymentService $paymentService)
     {
         $this->paymentRepository = $paymentRepository;
         $this->paymentService = $paymentService;
+        $this->bookingRepository = $bookingRepository;
     }
 
     public function checkout(Request $request)
@@ -39,8 +43,19 @@ class PaymentController extends Controller
         $session = $this->paymentService->retrieveSession($sessionId);
 
         $bookingId = $session->metadata->id;
+        $booking = $this->bookingRepository->findOne($bookingId);
+        $paymentData = $booking->payment;
 
-        $this->paymentService->createOrUpdatePaymentRecord($session, $bookingId);
+        $updateData = [
+            'customer_email' => $session->customer_email,
+            'amount_total' => $session->amount_total / 100,
+            'payment_intent_id' => $session->payment_intent,
+            'payment_method' => $session->payment_method_types[0],
+            'payment_status' => $session->payment_status,
+            'date' => now(),
+        ];
+
+        $this->paymentRepository->update($paymentData, $updateData);
 
         return redirect()->away(env('FRONTEND_URL') . "/booking-confirmation/{$bookingId}");
     }

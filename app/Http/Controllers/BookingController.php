@@ -59,17 +59,15 @@ class BookingController extends Controller
             $this->paymentRepository->save($paymentData);
         }
 
-        //    $url = $this->paymentService->createCheckoutSession($booking->email, $booking->total_price, $booking->id);
-        //    $qrCode = QrCode::format('png')->size(200)->generate($url);
-        //    $qrCodeBase64 = base64_encode($qrCode);
-        //    $booking = Booking::find($booking->id);
-        //    $booking->payment_qr_code = $qrCodeBase64;
-        //    $booking->save();
+        $url = $this->paymentService->createCheckoutSession($booking->email, $booking->total_price, $booking->id);
+        $qrCode = QrCode::format('png')->size(200)->generate($url);
+        $qrCodeBase64 = base64_encode($qrCode);
+        $booking = Booking::find($booking->id);
+        $booking->payment_qr_code = $qrCodeBase64;
+        $booking->save();
 
-
-
-        //        event(new GenerateQrCode($booking));
-        //        event(new BookingCreatedOrUpdated($booking));
+        event(new GenerateQrCode($booking));
+        event(new BookingCreatedOrUpdated($booking));
 
         return new BookingResource($booking);
     }
@@ -84,17 +82,6 @@ class BookingController extends Controller
         $this->bookingRepository->delete($booking);
         return response()->json(null, 204);
     }
-
-    public function updatev(UpdateBookingRequest $request, Booking $booking)
-    {
-        $bookingData = $request->validated();
-
-        // Update the booking data and associated payment data
-        $booking = $this->bookingRepository->update($booking, $bookingData);
-
-        return new BookingResource($booking);
-    }
-
 
 
     public function update(UpdateBookingRequest $request, Booking $booking)
