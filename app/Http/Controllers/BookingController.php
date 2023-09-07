@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Booking\IndexBookingRequest;
 use App\Http\Requests\Booking\StoreBookingRequest;
 use App\Http\Requests\Booking\UpdateBookingRequest;
 use App\Http\Resources\BookingResource;
@@ -12,6 +13,7 @@ use Illuminate\Http\Request;
 use App\Events\BookingCreatedOrUpdated;
 use App\Events\GenerateQrCode;
 use App\Models\Payment;
+use App\Repositories\Contracts\PaymentRepository;
 use App\Services\PaymentService;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Illuminate\Support\Str;
@@ -19,24 +21,23 @@ use Illuminate\Support\Str;
 class BookingController extends Controller
 {
 
+    protected $paymentRepository;
     protected $paymentService;
     protected $bookingRepository;
 
-    public function __construct(PaymentService $paymentService, BookingRepository $bookingRepository)
+
+    public function __construct(BookingRepository $bookingRepository, PaymentRepository $paymentRepository, PaymentService $paymentService)
     {
+        $this->paymentRepository = $paymentRepository;
         $this->paymentService = $paymentService;
         $this->bookingRepository = $bookingRepository;
     }
 
-    public function index()
-    {
-        $filter_status = request()->query('filter');
 
-        if ($filter_status) {
-            $bookings = $this->bookingRepository->findBy(['booking_status' => $filter_status]);
-        } else {
-            $bookings = $this->bookingRepository->findBy();
-        }
+
+    public function index(IndexBookingRequest $request)
+    {
+        $bookings = $this->bookingRepository->findBy($request->all());
         return new BookingResourceCollection($bookings);
     }
 
@@ -51,6 +52,18 @@ class BookingController extends Controller
         $bookingData['tracking_number'] = $trackingNumber;
 
         $booking = $this->bookingRepository->save($bookingData);
+        if (isset($booking->id)) {
+            $paymentData = [
+                'booking_id' => $booking->id,
+                'customer_email' => $bookingData['email'],
+                'amount_total' => $bookingData['total_price'],
+                'payment_status' => $bookingData['payment_status'],
+                'payment_method' => $bookingData['payment_method'],
+                'date' => now(),
+            ];
+
+            $this->paymentRepository->save($paymentData);
+        }
 
         $url = $this->paymentService->createCheckoutSession($booking->email, $booking->total_price, $booking->id);
         $qrCode = QrCode::format('png')->size(200)->generate($url);
@@ -59,21 +72,9 @@ class BookingController extends Controller
         $booking->payment_qr_code = $qrCodeBase64;
         $booking->save();
 
-        // Create a Payment record associated with the booking
-        $paymentData = [
-            'booking_id' => $booking->id,
-            'customer_email' => $bookingData['email'],
-            'amount_total' => $bookingData['total_price'],
-            'payment_status' => $bookingData['payment_status'],
-            // 'payment_method' => $bookingData['payment_method'],
-            'date' => now(),
-        ];
-        $payment = Payment::create($paymentData);
-
         event(new GenerateQrCode($booking));
         event(new BookingCreatedOrUpdated($booking));
 
-        $booking = Booking::with('payment')->find($booking->id);
         return new BookingResource($booking);
     }
 
@@ -88,13 +89,23 @@ class BookingController extends Controller
         return response()->json(null, 204);
     }
 
+
     public function update(UpdateBookingRequest $request, Booking $booking)
     {
         $bookingData = $request->validated();
 
-        // Update the booking data and associated payment data
-        $booking = $this->bookingRepository->update($booking, $bookingData);
+        $updatedBooking = $this->bookingRepository->update($booking, $bookingData);
 
-        return new BookingResource($booking);
+        if ($updatedBooking) {
+            $paymentData = [
+                'customer_email' => $bookingData['email'],
+                'amount_total' => $bookingData['total_price'],
+                'payment_status' => $bookingData['payment_status'],
+            ];
+
+            $this->paymentRepository->update($booking->payment, $paymentData);
+
+            return new BookingResource($updatedBooking);
+        }
     }
 }
