@@ -27,6 +27,7 @@ class BookingResource extends Resource
             'payment_qr_code' => $this->payment_qr_code,
             'released' => $this->released,
             'booking_status' => $this->booking_status,
+            'tracking_number'=>$this->tracking_number,
             'created_at' => $this->created_at,
 
             // 'payment' => $this->payment ? [
