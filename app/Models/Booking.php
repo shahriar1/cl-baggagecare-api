@@ -10,8 +10,8 @@ class Booking extends Model
 {
     use HasFactory;
 
-    const STATUS_IN_PROGRESS = "received";
-    const STATUS_DELIVERED = "delivered";
+    const STATUS_IN_PROGRESS = "check-in";
+    const STATUS_DELIVERED = "check-out";
     const STATUS_PENDING = "pending";
 
     const ALL_STATUS = [self::STATUS_DELIVERED, self::STATUS_IN_PROGRESS, self::STATUS_PENDING];
