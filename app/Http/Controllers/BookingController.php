@@ -46,12 +46,28 @@ class BookingController extends Controller
     {
         $bookingData = $request->validated();
 
+        $dropOffDate = new \DateTime($bookingData['drop_off_date']);
+        $pickUpDate = new \DateTime($bookingData['pick_up_date']);
+        $dateInterval = $pickUpDate->diff($dropOffDate);
+        $daysDifference = $dateInterval->days;
+        $pricePerDay = 5; 
+
         $randomNumber = Str::random(5);
         $date = now()->format('Ymd');
         $trackingNumber = $date . $randomNumber;
         $bookingData['tracking_number'] = $trackingNumber;
 
-        $booking = $this->bookingRepository->save($bookingData);
+        $totalPrice = $pricePerDay * $daysDifference * $bookingData['luggage_quantity'];
+
+        if ($bookingData['insuranceEnabled'] === false) {
+            if ($totalPrice === $bookingData['totalPrice'] ) {
+                $booking = $this->bookingRepository->save($bookingData);
+            }
+           
+        } else {
+            
+        }
+
         if (isset($booking->id)) {
             $paymentData = [
                 'booking_id' => $booking->id,
@@ -65,15 +81,15 @@ class BookingController extends Controller
             $this->paymentRepository->save($paymentData);
         }
 
-        $url = $this->paymentService->createCheckoutSession($booking->email, $booking->total_price, $booking->id);
-        $qrCode = QrCode::format('png')->size(200)->generate($url);
-        $qrCodeBase64 = base64_encode($qrCode);
-        $booking = Booking::find($booking->id);
-        $booking->payment_qr_code = $qrCodeBase64;
-        $booking->save();
+        // $url = $this->paymentService->createCheckoutSession($booking->email, $booking->total_price, $booking->id);
+        // $qrCode = QrCode::format('png')->size(200)->generate($url);
+        // $qrCodeBase64 = base64_encode($qrCode);
+        // $booking = Booking::find($booking->id);
+        // $booking->payment_qr_code = $qrCodeBase64;
+        // $booking->save();
 
-        event(new GenerateQrCode($booking));
-        event(new BookingCreatedOrUpdated($booking));
+        // event(new GenerateQrCode($booking));
+        // event(new BookingCreatedOrUpdated($booking));
 
         return new BookingResource($booking);
     }
