@@ -26,6 +26,10 @@ class UpdateBookingRequest extends Request
             'payment_status' => 'required|string',
             'payment_method'=> 'nullable|string',
             'booking_status'=> ['nullable', 'string', Rule::in(Booking::ALL_STATUS)],
+            'insuranceEnabled' => 'nullable|boolean', 
+            'payment_amount' => 'nullable|numeric', 
+            'insurance_amount' => 'nullable|numeric',
+            'tips_amount' => 'nullable|numeric',
         ];
     }
 }
