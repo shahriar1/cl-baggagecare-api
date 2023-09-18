@@ -28,6 +28,7 @@ class BookingResource extends Resource
             'released' => $this->released,
             'booking_status' => $this->booking_status,
             'tracking_number'=>$this->tracking_number,
+            'tips_amount'=>$this->tips_amount,
             'created_at' => $this->created_at,
 
             // 'payment' => $this->payment ? [

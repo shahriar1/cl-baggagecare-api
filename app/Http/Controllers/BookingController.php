@@ -42,57 +42,65 @@ class BookingController extends Controller
     }
 
 
+
     public function store(StoreBookingRequest $request)
     {
         $bookingData = $request->validated();
+
+        // Calculate the total price based on the number of days and luggage quantity
+        $pricePerDay = 5;
+        $insuranceValue = 1.5;
 
         $dropOffDate = new \DateTime($bookingData['drop_off_date']);
         $pickUpDate = new \DateTime($bookingData['pick_up_date']);
         $dateInterval = $pickUpDate->diff($dropOffDate);
         $daysDifference = $dateInterval->days;
-        $pricePerDay = 5; 
 
-        $randomNumber = Str::random(5);
-        $date = now()->format('Ymd');
-        $trackingNumber = $date . $randomNumber;
-        $bookingData['tracking_number'] = $trackingNumber;
-
-        $totalPrice = $pricePerDay * $daysDifference * $bookingData['luggage_quantity'];
-
-        if ($bookingData['insuranceEnabled'] === false) {
-            if ($totalPrice === $bookingData['totalPrice'] ) {
-                $booking = $this->bookingRepository->save($bookingData);
-            }
-           
+        if ($bookingData['insuranceEnabled'] === true) {
+            $totalPrice = ($pricePerDay * $daysDifference * $bookingData['luggage_quantity']) + ($insuranceValue * $bookingData['luggage_quantity']);
+            $bookingData['insurance_amount'] = ($insuranceValue * $bookingData['luggage_quantity']);
         } else {
-            
+            $totalPrice = $pricePerDay * $daysDifference * $bookingData['luggage_quantity'];
         }
 
-        if (isset($booking->id)) {
-            $paymentData = [
-                'booking_id' => $booking->id,
-                'customer_email' => $bookingData['email'],
-                'amount_total' => $bookingData['total_price'],
-                'payment_status' => $bookingData['payment_status'],
-                'payment_method' => $bookingData['payment_method'],
-                'date' => now(),
-            ];
+        // Check if the provided total price matches the calculated price
+        if ($bookingData['total_price'] == $totalPrice) {
+            $randomNumber = Str::random(5);
+            $date = now()->format('Ymd');
+            $trackingNumber = $date . $randomNumber;
+            $bookingData['tracking_number'] = $trackingNumber;
+            // Save the booking
+            $booking = $this->bookingRepository->save($bookingData);
 
-            $this->paymentRepository->save($paymentData);
+            if (isset($booking->id)) {
+                $paymentData = [
+                    'booking_id' => $booking->id,
+                    'customer_email' => $bookingData['email'],
+                    'amount_total' => $bookingData['total_price'],
+                    'payment_status' => $bookingData['payment_status'],
+                    'payment_method' => $bookingData['payment_method'],
+                    'date' => now(),
+                ];
+
+                $this->paymentRepository->save($paymentData);
+            }
+
+            $url = $this->paymentService->createCheckoutSession($booking->email, $booking->total_price, $booking->id);
+            $qrCode = QrCode::format('png')->size(200)->generate($url);
+            $qrCodeBase64 = base64_encode($qrCode);
+            $booking = Booking::find($booking->id);
+            $booking->payment_qr_code = $qrCodeBase64;
+            $booking->save();
+
+            event(new GenerateQrCode($booking));
+            event(new BookingCreatedOrUpdated($booking));
+
+            return new BookingResource($booking);
+        } else {
+            return response()->json(['message' => 'Invalid total price'], 400);
         }
-
-        // $url = $this->paymentService->createCheckoutSession($booking->email, $booking->total_price, $booking->id);
-        // $qrCode = QrCode::format('png')->size(200)->generate($url);
-        // $qrCodeBase64 = base64_encode($qrCode);
-        // $booking = Booking::find($booking->id);
-        // $booking->payment_qr_code = $qrCodeBase64;
-        // $booking->save();
-
-        // event(new GenerateQrCode($booking));
-        // event(new BookingCreatedOrUpdated($booking));
-
-        return new BookingResource($booking);
     }
+
 
     public function show(Booking $booking)
     {
