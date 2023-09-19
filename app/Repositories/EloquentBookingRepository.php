@@ -15,6 +15,6 @@ class EloquentBookingRepository extends EloquentBaseRepository implements \App\R
             unset($searchCriteria['query']);
         }
 
-        return parent::findBy($searchCriteria);
+        return $this->findByWithDateRanges($searchCriteria, $withTrashed, true);
     }
 }

@@ -6,6 +6,7 @@ use App\Repositories\Contracts\BaseRepository;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
+use Carbon\Carbon;
 class EloquentBaseRepository implements BaseRepository
 {
     protected Model $model;
@@ -249,5 +250,38 @@ class EloquentBaseRepository implements BaseRepository
     public function delete(\ArrayAccess $model): bool
     {
         return $model->delete();
+    }
+
+    public function findByWithDateRanges(array $searchCriteria = [], $withTrashed = false, $timestamp = true)
+    {
+        $queryBuilder = $this->model;
+
+        if (isset($searchCriteria['endDate'])) {
+            $queryBuilder  =  $queryBuilder->whereDate('created_at', '<=', Carbon::parse($searchCriteria['endDate']));
+            unset($searchCriteria['endDate']);
+        }
+
+        if (isset($searchCriteria['startDate'])) {
+            $queryBuilder =  $queryBuilder->whereDate('created_at', '>=', Carbon::parse($searchCriteria['startDate']));
+            unset($searchCriteria['startDate']);
+        }
+        if (isset($searchCriteria['id'])) {
+            $searchCriteria['id'] = is_array($searchCriteria['id']) ? implode(",", array_unique($searchCriteria['id'])) : $searchCriteria['id'];
+        }
+
+        $queryBuilder = $queryBuilder->where(function ($query) use ($searchCriteria) {
+            $this->applySearchCriteriaInQueryBuilder($query, $searchCriteria);
+        });
+
+        $limit = !empty($searchCriteria['per_page']) ? (int)$searchCriteria['per_page'] : 15;
+        $orderBy = !empty($searchCriteria['order_by']) ? $searchCriteria['order_by'] : 'id';
+        $orderDirection = !empty($searchCriteria['order_direction']) ? $searchCriteria['order_direction'] : 'desc';
+        $queryBuilder->orderBy($orderBy, $orderDirection);
+
+        if (empty($searchCriteria['withoutPagination'])) {
+            return $queryBuilder->paginate($limit);
+        } else {
+            return $queryBuilder->get();
+        }
     }
 }
