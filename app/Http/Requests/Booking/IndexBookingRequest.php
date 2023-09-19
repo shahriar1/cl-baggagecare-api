@@ -17,9 +17,11 @@ class IndexBookingRequest extends Request
     {
         return [
             'booking_status' => ['', Rule::in(Booking::ALL_STATUS)],
-            'email' => 'nullable|email', // Allowing filtering by email
-            'first_name' => 'nullable|string', // Allowing filtering by name
-            'query' => 'string'
+            'email' => 'nullable|email', 
+            'first_name' => 'nullable|string',
+            'query' => 'string',
+            'startDate' => 'date_format:Y-m-d',
+            'endDate' => 'date_format:Y-m-d',
         ];
     }
 }
