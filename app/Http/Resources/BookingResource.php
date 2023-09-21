@@ -30,6 +30,8 @@ class BookingResource extends Resource
             'tracking_number'=>$this->tracking_number,
             'tips_amount'=>$this->tips_amount,
             'payment_amount'=>$this->payment_amount,
+            'insurance_amount'=>$this->insurance_amount,
+            'insuranceEnabled'=>$this->insuranceEnabled,
             'created_at' => $this->created_at,
 
             // 'payment' => $this->payment ? [

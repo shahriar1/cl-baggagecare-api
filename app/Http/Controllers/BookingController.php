@@ -57,10 +57,10 @@ class BookingController extends Controller
         $daysDifference = $dateInterval->days;
 
         if ($bookingData['insuranceEnabled'] === true) {
-            $totalPrice = ($pricePerDay * $daysDifference * $bookingData['luggage_quantity']) + ($insuranceValue * $bookingData['luggage_quantity']);
+            $totalPrice = ($pricePerDay * $daysDifference * $bookingData['luggage_quantity']) + ($insuranceValue * $bookingData['luggage_quantity']) + $bookingData['tips_amount'];
             $bookingData['insurance_amount'] = ($insuranceValue * $bookingData['luggage_quantity']);
         } else {
-            $totalPrice = $pricePerDay * $daysDifference * $bookingData['luggage_quantity'];
+            $totalPrice = $pricePerDay * $daysDifference * $bookingData['luggage_quantity'] + $bookingData['tips_amount'];
         }
 
         // Check if the provided total price matches the calculated price
