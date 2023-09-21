@@ -13,8 +13,9 @@ class Booking extends Model
     const STATUS_IN_PROGRESS = "check-in";
     const STATUS_DELIVERED = "check-out";
     const STATUS_PENDING = "pending";
+    const STATUS_CANCELLED = "cancelled";
 
-    const ALL_STATUS = [self::STATUS_DELIVERED, self::STATUS_IN_PROGRESS, self::STATUS_PENDING];
+    const ALL_STATUS = [self::STATUS_DELIVERED, self::STATUS_IN_PROGRESS, self::STATUS_PENDING,self::STATUS_CANCELLED];
     protected $fillable = [
         'drop_off_date',
         'drop_off_time',
