@@ -132,4 +132,18 @@ class BookingController extends Controller
             return new BookingResource($updatedBooking);
         }
     }
+
+    public function bulkUpdate(Request $request)
+    {
+        $selectedBookingIds = $request->input('selectedBookingIds', []);
+
+        $updatedData = [
+            'booking_status' => $request->input('newBookingStatus'),
+        ];
+
+        Booking::whereIn('id', $selectedBookingIds)->update($updatedData);
+        $updatedBookings = Booking::whereIn('id', $selectedBookingIds)->get();
+
+        return BookingResource::collection($updatedBookings);
+    }
 }
