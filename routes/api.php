@@ -26,6 +26,7 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::resource('booking', BookingController::class);
+Route::put('/booking-bulk-update', [BookingController::class, 'bulkUpdate']);
 
 Route::post('/payment/checkout', [PaymentController::class, 'checkout'])->name('payment.checkout');
 Route::get('success', [PaymentController::class, 'success'])->name('success');
