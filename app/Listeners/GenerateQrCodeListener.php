@@ -19,7 +19,7 @@ class GenerateQrCodeListener implements ShouldQueue
         $booking = $event->booking;
         $bookingId = $booking->id;
 
-        $qrCodeData = "{$url}/booking-confirmation/{$bookingId}";
+        $qrCodeData = "{$url}/admin/booking-list/{$bookingId}";
 
         $qrCodeImage = QrCode::format('png')->size(200)->generate($qrCodeData);
 
