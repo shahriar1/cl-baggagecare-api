@@ -57,11 +57,17 @@ class BookingController extends Controller
         $daysDifference = $dateInterval->days;
 
         if ($bookingData['insuranceEnabled'] === true) {
-            $totalPrice = ($pricePerDay * $daysDifference * $bookingData['luggage_quantity']) + ($insuranceValue * $bookingData['luggage_quantity']) + $bookingData['tips_amount'];
-            $bookingData['insurance_amount'] = ($insuranceValue * $bookingData['luggage_quantity']);
+            $insuranceAmount = $insuranceValue * $bookingData['luggage_quantity'];
         } else {
-            $totalPrice = $pricePerDay * $daysDifference * $bookingData['luggage_quantity'] + $bookingData['tips_amount'];
+            $insuranceAmount = 0;
         }
+        if ($daysDifference === 0) {
+            $totalPrice = $pricePerDay * $bookingData['luggage_quantity'] + $bookingData['tips_amount'] + $insuranceAmount;
+        } else {
+            $totalPrice = $pricePerDay * $daysDifference * $bookingData['luggage_quantity'] + $bookingData['tips_amount'] + $insuranceAmount;
+        }
+
+        $bookingData['insurance_amount'] = $insuranceAmount;
 
         // Check if the provided total price matches the calculated price
         if ($bookingData['total_price'] == $totalPrice) {
@@ -69,8 +75,20 @@ class BookingController extends Controller
             $date = now()->format('Ymd');
             $trackingNumber = $date . $randomNumber;
             $bookingData['tracking_number'] = $trackingNumber;
+
             // Save the booking
             $booking = $this->bookingRepository->save($bookingData);
+
+            $url = env('FRONTEND_URL');
+            $bookingId = $booking->id;
+            $qrCodeData = "{$url}/admin/booking-list/{$bookingId}";
+            $qrCodeImage = QrCode::format('png')->size(200)->generate($qrCodeData);
+            $qrCodeBase64 = base64_encode($qrCodeImage);
+            $bookingData['qr_code'] =$qrCodeBase64;
+
+
+            $updatedBooking = $this->bookingRepository->update($booking, $bookingData);
+
 
             if (isset($booking->id)) {
                 $paymentData = [
@@ -92,10 +110,10 @@ class BookingController extends Controller
             $booking->payment_qr_code = $qrCodeBase64;
             $booking->save();
 
-            event(new GenerateQrCode($booking));
+            // event(new GenerateQrCode($booking));
             event(new BookingCreatedOrUpdated($booking));
 
-            return new BookingResource($booking);
+            return new BookingResource($updatedBooking);
         } else {
             return response()->json(['message' => 'Invalid total price'], 400);
         }
