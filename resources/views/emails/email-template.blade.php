@@ -136,23 +136,17 @@
                                     <tr>
                                         <td
                                             style="
-                                            padding: 48px 56px 0;
+                                            padding: 18px 26px 0;
                                             text-align: center;
                                             font-size: 24px;
                                             font-weight: bold;
                                         "
                                         >
-                                            <a
-                                                href="{{ config('app.logo_url') }}"
-                                                style="text-decoration: none"
-                                            >
-                                                <img 
-                                                    src="{{ config('app.logo_url') }}" 
-                                                    alt="Logo"
-                                                    width="160"
-                                                    height="29"
-                                                >
-                                            </a>
+                                          <img  width="60" height="60" src="{{ $message->embed(public_path().'/logo/luggage.png') }}">
+                                          {{-- <h4 style="
+                                          color: #02577A; display: inline;margin-left: 10px;  
+                                          font-size: 2rem;"
+                                          >Luggage</h4> --}}
                                         </td>
                                     </tr>
 
@@ -161,17 +155,15 @@
                                     <tr>
                                         <td
                                             style="
-                                                padding: 80px 56px 0 56px;
                                                 text-align: center;
                                                 font-style: normal;
                                                 font-weight: normal;
                                                 font-size: 12px;
-                                                line-height: 19px;
                                                 color: #8386af;
                                             "
                                         >
-                                        baggagecare.it
-                                        <br>via giovanni giolitti 73/75
+                                        
+                                        via giovanni giolitti 73/75
                                         rome, 00185
                                         </td>
                                     </tr>
@@ -179,7 +171,7 @@
                                     <tr>
                                         <td
                                             style="
-                                                padding: 16px 56px 40px;
+                                                padding: 6px 36px 20px;
                                                 text-align: center;
                                                 font-style: normal;
                                                 font-weight: normal;

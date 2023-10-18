@@ -2,7 +2,7 @@
 ​
 @section('content')
     <tr>
-        <td style="height: 40px; padding-top: 32px">
+        <td style="height: 30px; padding-top: 12px">
             <h1
                 style="
                     font-style: normal;
@@ -18,7 +18,7 @@
         </td>
     </tr>
     <tr>
-        <td style="padding: 32px 56px 0">
+        <td style="padding: 12px 36px 0">
             {{-- <h1
                 style="
                     font-style: normal;
@@ -31,9 +31,9 @@
                 Hi, {{ $to_name }}
             </h1> --}}
 
-            <p>A new booking has been created/updated:</p>
+            <p>A new booking has been created:</p>
             <ul>
-                <li>Booking ID: {{ $booking->id }}</li>
+                <li>Tracking Number: {{ $booking->tracking_number }}</li>
                 <li>Name: {{ $booking->first_name }} {{ $booking->last_name }}</li>
                 <li>Email: {{ $booking->email }}</li>
                 <li>Phone Number: {{ $booking->phone_number }}</li>
