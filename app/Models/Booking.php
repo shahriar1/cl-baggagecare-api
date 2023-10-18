@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class Booking extends Model
 {
@@ -16,6 +17,7 @@ class Booking extends Model
     const STATUS_CANCELLED = "cancelled";
 
     const ALL_STATUS = [self::STATUS_DELIVERED, self::STATUS_IN_PROGRESS, self::STATUS_PENDING,self::STATUS_CANCELLED];
+   
     protected $fillable = [
         'drop_off_date',
         'drop_off_time',
@@ -38,6 +40,21 @@ class Booking extends Model
         'tips_amount',
         'insuranceEnabled'
     ];
+
+    public static function boot()
+    {
+        parent::boot();
+
+        self::created(function ($booking) {
+            $url = env('FRONTEND_URL');
+            $qrCodeData = "{$url}/admin/booking-list/{$booking->id}";
+            $qrCodeImage = QrCode::format('png')->size(200)->generate($qrCodeData);
+            $qrCodeBase64 = base64_encode($qrCodeImage);
+            $booking->qr_code = $qrCodeBase64;
+            $booking->save();
+        });
+    }
+    
     public function payment(): HasOne
     {
         return $this->hasOne(Payment::class);
