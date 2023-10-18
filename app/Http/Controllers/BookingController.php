@@ -55,6 +55,7 @@ class BookingController extends Controller
         $pickUpDate = new \DateTime($bookingData['pick_up_date']);
         $dateInterval = $pickUpDate->diff($dropOffDate);
         $daysDifference = $dateInterval->days;
+        $daysDifference += 1;
 
         if ($bookingData['insuranceEnabled'] === true) {
             $insuranceAmount = $insuranceValue * $bookingData['luggage_quantity'];
