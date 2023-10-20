@@ -13,13 +13,13 @@
                     color: #1d1e2d;
                 "
             >
-              Booking Details
+              Booking Confirmation
             </h1>
         </td>
     </tr>
     <tr>
         <td style="padding: 12px 36px 0">
-            {{-- <h1
+            <h1
                 style="
                     font-style: normal;
                     font-weight: normal;
@@ -28,71 +28,38 @@
                     color: #1d1e2d;
                 "
             >
-                Hi, {{ $to_name }}
-            </h1> --}}
+                Hi, {{ $booking->first_name }}
+            </h1>
 
-            <p>A new booking has been created:</p>
-            <ul>
-                <li>Tracking Number: {{ $booking->tracking_number }}</li>
-                <li>Name: {{ $booking->first_name }} {{ $booking->last_name }}</li>
-                <li>Email: {{ $booking->email }}</li>
-                <li>Phone Number: {{ $booking->phone_number }}</li>
-                <!-- Add more booking details here as needed -->
-            </ul>
-​
-            {{-- <div
-                style="
-                    margin-top: 24px;
-                    min-height: 40px;
-                    display: flex;
-                    flex-direction: column;
-                    justify-content: space-between;
-                    color: #1d1e2d;
-                "
-            >
-                <div style="display: flex;
-                    flex-direction: row;
-                    justify-content: flex-start;"
-                >
-                    <div style="font-size: 14px; font-weight: bold; line-height: 24px; text-align: justify; width: 70px;">
-                        Product
-                    </div>
-                    <div style="font-size: 14px; line-height: 24px; text-align: justify;">
-                        : {{ $product_name }}
-                    </div>
-                </div>
-​
-                <div style="display: flex;
-                    flex-direction: row;
-                    justify-content: flex-start;"
-                >
-                    <div style="font-size: 14px; font-weight: bold; line-height: 24px; text-align: justify; width: 70px;">
-                        Quantity
-                    </div>
-                    <div style="font-size: 14px; line-height: 24px; text-align: justify;">
-                        : {{ $quantity }}
-                    </div>
-                </div>
-​
-                <div style="display: flex;
-                    flex-direction: row;
-                    justify-content: flex-start;"
-                >
-                    <div style="font-size: 14px; font-weight: bold; line-height: 24px; text-align: justify; width: 70px;">
-                        Branch
-                    </div>
-                    <div style="font-size: 14px; line-height: 24px; text-align: justify;">
-                        : {{ $branch_name }}
-                    </div>
-                </div>
-            </div>
-        </td> --}}
+            <p>We are pleased to inform you that a new booking has been created. Below are the details:</p>
+            <table style="border-collapse: collapse; width: 100%; max-width: 600px; margin: 20px auto; background-color: #f1f1f1;">
+                <tr>
+                    <th style="padding: 10px; text-align: left; background-color: #e0e0e0; border: 1px solid #ccc;">Tracking Number</th>
+                    <th style="padding: 10px; text-align: left; background-color: #e0e0e0; border: 1px solid #ccc;">Drop-Off-Date</th>
+                    <th style="padding: 10px; text-align: left; background-color: #e0e0e0; border: 1px solid #ccc;">Quantity</th>
+                    <th style="padding: 10px; text-align: left; background-color: #e0e0e0; border: 1px solid #ccc;">Total Amount</th>
+                </tr>
+                <tr>
+                    <td style="padding: 10px; text-align: left; background-color: white; border: 1px solid #ccc;">{{ $booking->tracking_number  }}</td>
+                    <td style="padding: 10px; text-align: left; background-color: white; border: 1px solid #ccc;">{{ $booking->drop_off_date  }}</td>
+                    <td style="padding: 10px; text-align: left; background-color: white; border: 1px solid #ccc;">{{ $booking->first_name  }}</td>
+                    <td style="padding: 10px; text-align: left; background-color: white; border: 1px solid #ccc;">{{ $booking->total_price  }}</td>
+                </tr>
+                
+            </table>
+        </td>
     </tr>
+    <ul>
+        {{-- <li>Tracking Number: {{ $booking->tracking_number }}</li> --}}
+        <li>Name: {{ $booking->first_name }} {{ $booking->last_name }}</li>
+        <li>Email: {{ $booking->email }}</li>
+        <li>Phone Number: {{ $booking->phone_number }}</li>
+    </ul>
 ​
-    {{-- <tr>
+    <tr>
         <td style="padding: 32px 56px 42px 56px; text-align: center;">
             <a
-                href="{{ $frontend_url }}"
+                href="{{ env('FRONTEND_URL') . '/booking-confirmation/' . $booking->id }}"
                 target="_blank"
                 style="
                     padding: 10px 16px;
@@ -109,8 +76,8 @@
                     text-decoration: none;
                 "
             >
-                Go to Stock
+                Go to Details Page
             </a>
         </td>
-    </tr> --}}
+    </tr>
 @endsection
