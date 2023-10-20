@@ -14,6 +14,12 @@ class SendBookingCreatedOrUpdatedNotification
 
     public function handle(BookingCreatedOrUpdated $event)
     {
+
+        $booking = $event->booking;
+        $user_email = $booking->email;
+        
+        Mail::to($user_email)->send(new BookingNotification($event->booking));
+
         $admins = explode(',', env('ADMIN_EMAILS'));
 
         foreach ($admins as $adminEmail) {

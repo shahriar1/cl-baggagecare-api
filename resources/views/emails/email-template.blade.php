@@ -10,7 +10,6 @@
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <meta name="x-apple-disable-message-reformatting" />
     <title></title>
-    <!--[if mso]>
     <style>
         table {
             border-collapse: collapse;
@@ -33,7 +32,6 @@
             </o:OfficeDocumentSettings>
         </xml>
     </noscript>
-    <![endif]-->
     <style>
         table,
         td,
@@ -108,7 +106,6 @@
         >
             <tr>
                 <td align="center" style="padding: 0">
-                    <!--[if mso]>
                     <table
                         role="presentation"
                         align="center"
@@ -116,7 +113,6 @@
                     >
                         <tr>
                             <td>
-                            <![endif]-->
                                 <table
                                     role="presentation"
                                     style="
@@ -149,6 +145,8 @@
                                           >Luggage</h4> --}}
                                         </td>
                                     </tr>
+
+                                    
 
                                     @yield('content')
 
@@ -184,11 +182,9 @@
                                         </td>
                                     </tr>
                                 </table>
-                            <!--[if mso]>
                             </td>
                         </tr>
                     </table>
-                    <![endif]-->
                 </td>
             </tr>
         </table>
