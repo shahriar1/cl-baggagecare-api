@@ -80,4 +80,28 @@
             </a>
         </td>
     </tr>
+    <tr>
+        <td style="padding: 12px 26px 22px 26px; text-align: center;">
+            <a
+                href="https://maps.app.goo.gl/e22kL8pgtkfc24RD9"
+                target="_blank"
+                style="
+                    padding: 10px 16px;
+                    font-size: 14px;
+                    line-height: 16px;
+                    background: transparent;
+                    border: 1px solid #0363ed;
+                    color: #0363ed;
+                    letter-spacing: 1.25px;
+                    box-sizing: border-box;
+                    border-radius: 4px;
+                    font-weight: bold;
+                    cursor: pointer;
+                    text-decoration: none;
+                "
+            >
+                Go to Google map
+            </a>
+        </td>
+    </tr>
 @endsection
