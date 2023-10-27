@@ -42,7 +42,7 @@
                 <tr>
                     <td style="padding: 10px; text-align: left; background-color: white; border: 1px solid #ccc;">{{ $booking->tracking_number  }}</td>
                     <td style="padding: 10px; text-align: left; background-color: white; border: 1px solid #ccc;">{{ $booking->drop_off_date  }}</td>
-                    <td style="padding: 10px; text-align: left; background-color: white; border: 1px solid #ccc;">{{ $booking->first_name  }}</td>
+                    <td style="padding: 10px; text-align: left; background-color: white; border: 1px solid #ccc;">{{ $booking->luggage_quantity  }}</td>
                     <td style="padding: 10px; text-align: left; background-color: white; border: 1px solid #ccc;">{{ $booking->total_price  }}</td>
                 </tr>
                 

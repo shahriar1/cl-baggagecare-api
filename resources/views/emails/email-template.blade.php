@@ -25,13 +25,13 @@
             margin: 0 !important;
         }
     </style>
-    <noscript>
+    {{-- <noscript>
         <xml>
             <o:OfficeDocumentSettings>
                 <o:PixelsPerInch>96</o:PixelsPerInch>
             </o:OfficeDocumentSettings>
         </xml>
-    </noscript>
+    </noscript> --}}
     <style>
         table,
         td,
