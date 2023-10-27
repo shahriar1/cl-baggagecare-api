@@ -13,7 +13,7 @@
                     color: #1d1e2d;
                 "
             >
-              Booking Confirmation
+            {{ __('messages.title') }}
             </h1>
         </td>
     </tr>
@@ -28,16 +28,16 @@
                     color: #1d1e2d;
                 "
             >
-                Hi, {{ $booking->first_name }}
+            {{ __('messages.greeting') }}, {{ $booking->first_name }}
             </h1>
 
-            <p>We are pleased to inform you that a new booking has been created. Below are the details:</p>
+            <p>{{ __('messages.details') }}</p>
             <table style="border-collapse: collapse; width: 100%; max-width: 600px; margin: 20px auto; background-color: #f1f1f1;">
                 <tr>
-                    <th style="padding: 10px; text-align: left; background-color: #e0e0e0; border: 1px solid #ccc;">Tracking Number</th>
-                    <th style="padding: 10px; text-align: left; background-color: #e0e0e0; border: 1px solid #ccc;">Drop-Off-Date</th>
-                    <th style="padding: 10px; text-align: left; background-color: #e0e0e0; border: 1px solid #ccc;">Quantity</th>
-                    <th style="padding: 10px; text-align: left; background-color: #e0e0e0; border: 1px solid #ccc;">Total Amount</th>
+                    <th style="padding: 10px; text-align: left; background-color: #e0e0e0; border: 1px solid #ccc;">{{ __('messages.tracking_number') }}</th>
+                    <th style="padding: 10px; text-align: left; background-color: #e0e0e0; border: 1px solid #ccc;">{{ __('messages.drop_off_date') }}</th>
+                    <th style="padding: 10px; text-align: left; background-color: #e0e0e0; border: 1px solid #ccc;">{{ __('messages.quantity') }}</th>
+                    <th style="padding: 10px; text-align: left; background-color: #e0e0e0; border: 1px solid #ccc;">{{ __('messages.total_amount') }}</th>
                 </tr>
                 <tr>
                     <td style="padding: 10px; text-align: left; background-color: white; border: 1px solid #ccc;">{{ $booking->tracking_number  }}</td>
@@ -76,7 +76,7 @@
                     text-decoration: none;
                 "
             >
-                Go to Details Page
+                {{ __('messages.go_to_details') }}
             </a>
         </td>
     </tr>
@@ -100,7 +100,7 @@
                     text-decoration: none;
                 "
             >
-                Go to Google map
+            {{ __('messages.go_to_map') }}
             </a>
         </td>
     </tr>

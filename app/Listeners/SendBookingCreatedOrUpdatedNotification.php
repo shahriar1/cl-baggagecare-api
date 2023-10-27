@@ -18,13 +18,8 @@ class SendBookingCreatedOrUpdatedNotification
 
         $booking = $event->booking;
         $user_email = $booking->email;
-
-        // if (!is_null($booking->selectedLanguage)) {
-
-        //     App::setLocale($booking->selectedLanguage);
-        // } else {
-        //     App::setLocale('en');
-        // }
+        
+        App::setLocale($booking->selectedLanguage);
 
         Mail::to($user_email)->send(new BookingNotification($event->booking));
 
