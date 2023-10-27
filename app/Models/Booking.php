@@ -38,7 +38,8 @@ class Booking extends Model
         'payment_amount',
         'insurance_amount',
         'tips_amount',
-        'insuranceEnabled'
+        'insuranceEnabled',
+        'selectedLanguage'
     ];
 
     public static function boot()
