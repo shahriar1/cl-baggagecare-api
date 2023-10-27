@@ -2,18 +2,17 @@
 
 namespace App\Mail;
 
-use App\Models\Booking;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use App\Models\Booking;
 
 
-class BookingCreatedOrUpdatedNotification extends Mailable
+class AdminEmail extends Mailable
 {
-
     use Queueable, SerializesModels;
 
     public $booking;
@@ -25,7 +24,7 @@ class BookingCreatedOrUpdatedNotification extends Mailable
 
     public function build()
     {
-        return $this->subject("BaggageCare Booking Confirmation - {$this->booking->tracking_number}")
+        return $this->subject("New Booking - {$this->booking->tracking_number}")
             ->view('emails.booking_created_or_updated');
     }
 }

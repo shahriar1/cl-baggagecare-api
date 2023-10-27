@@ -7,6 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\BookingCreatedOrUpdatedNotification as BookingNotification;
+use App\Mail\AdminEmail as AdminBookingNotification;
 use Illuminate\Support\Facades\App;
 
 class SendBookingCreatedOrUpdatedNotification
@@ -27,7 +28,7 @@ class SendBookingCreatedOrUpdatedNotification
 
         foreach ($admins as $adminEmail) {
 
-            Mail::to($adminEmail)->send(new BookingNotification($event->booking));
+            Mail::to($adminEmail)->send(new AdminBookingNotification($event->booking));
         }
     }
 }
