@@ -25,13 +25,13 @@
             margin: 0 !important;
         }
     </style>
-    <noscript>
+    {{-- <noscript>
         <xml>
             <o:OfficeDocumentSettings>
                 <o:PixelsPerInch>96</o:PixelsPerInch>
             </o:OfficeDocumentSettings>
         </xml>
-    </noscript>
+    </noscript> --}}
     <style>
         table,
         td,
@@ -161,8 +161,7 @@
                                             "
                                         >
                                         
-                                        via giovanni giolitti 73/75
-                                        rome, 00185
+                                        {{ __('messages.footer1') }}
                                         </td>
                                     </tr>
                                     
@@ -178,7 +177,7 @@
                                                 color: #8386af;
                                             "
                                         >
-                                        {{ now()->year }} baggagecare.it®, All rights reserved.
+                                        {{ now()->year }} {{ __('messages.footer2') }}
                                         </td>
                                     </tr>
                                 </table>

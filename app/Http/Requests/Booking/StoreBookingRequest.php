@@ -30,6 +30,7 @@ class StoreBookingRequest extends Request
             'payment_amount' => 'nullable|numeric', 
             'insurance_amount' => 'nullable|numeric',
             'tips_amount' => 'nullable|numeric',
+            'selectedLanguage' => 'nullable|string',
         ];
     }
 }
