@@ -26,6 +26,8 @@ class SendBookingCreatedOrUpdatedNotification
 
         $admins = explode(',', env('ADMIN_EMAILS'));
 
+        App::setLocale('en');
+
         foreach ($admins as $adminEmail) {
 
             Mail::to($adminEmail)->send(new AdminBookingNotification($event->booking));

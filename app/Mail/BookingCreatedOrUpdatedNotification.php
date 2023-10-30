@@ -25,7 +25,10 @@ class BookingCreatedOrUpdatedNotification extends Mailable
 
     public function build()
     {
-        return $this->subject("BaggageCare Booking Confirmation - {$this->booking->tracking_number}")
+        $trackingNumber = $this->booking->tracking_number;
+        $trackingNumberUpper = strtoupper($trackingNumber);
+
+        return $this->subject("BaggageCare Booking Confirmation - {$trackingNumberUpper}")
             ->view('emails.booking_created_or_updated');
     }
 }

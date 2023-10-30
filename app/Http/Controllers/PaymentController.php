@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\BookingCreatedOrUpdated;
 use Illuminate\Http\Request;
 use App\Http\Requests\Payment\StorePaymentRequest;
 use App\Http\Requests\Payment\UpdatePaymentRequest;
@@ -54,6 +55,8 @@ class PaymentController extends Controller
             'payment_status' => $session->payment_status,
             'date' => now(),
         ];
+
+        event(new BookingCreatedOrUpdated($booking));
 
         $this->paymentRepository->update($paymentData, $updateData);
 
