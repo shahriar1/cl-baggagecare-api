@@ -24,7 +24,10 @@ class AdminEmail extends Mailable
 
     public function build()
     {
-        return $this->subject("New Booking - {$this->booking->tracking_number}")
+        $trackingNumber = $this->booking->tracking_number;
+        $trackingNumberUpper = strtoupper($trackingNumber);
+
+        return $this->subject("New Booking - {$trackingNumberUpper}")
             ->view('emails.booking_created_or_updated');
     }
 }
