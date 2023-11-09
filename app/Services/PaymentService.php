@@ -22,7 +22,7 @@ class PaymentService
 
         $lineItems = [[
             'price_data' => [
-                'currency' => 'usd',
+                'currency' => 'eur',
                 'unit_amount' => $total_price * 100, // Convert to cents
                 'product_data' => [
                     'name' => 'Booking',
