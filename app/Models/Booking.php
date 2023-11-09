@@ -48,7 +48,7 @@ class Booking extends Model
 
         self::created(function ($booking) {
             $url = env('FRONTEND_URL');
-            $qrCodeData = "{$url}/admin/booking-list/{$booking->id}";
+            $qrCodeData = "{$url}/booking-confirmation{$booking->id}";
             $qrCodeImage = QrCode::format('png')->size(200)->generate($qrCodeData);
             $qrCodeBase64 = base64_encode($qrCodeImage);
             $booking->qr_code = $qrCodeBase64;
